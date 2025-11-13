@@ -1,0 +1,19 @@
+using ECommerce.Domain.Enums;
+
+namespace ECommerce.Domain.Entities;
+
+public class User : BaseEntity
+{
+    public required string Name { get; set; }
+
+    public required string Email { get; set; }
+
+    public required string PasswordHash { get; set; }
+
+    public UserRole Role { get; set; } = UserRole.Customer;
+
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+}
+
