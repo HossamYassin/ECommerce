@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using ECommerce.Application.Common.DTOs;
 using ECommerce.Application.Common.Models;
 using ECommerce.Application.Features.Customers.Commands.UpdateCustomerProfile;
@@ -45,17 +44,6 @@ public class CustomersController : ApiControllerBase
         var customerId = GetCurrentUserId();
         var result = await Sender.Send(new GetCustomerOrdersQuery(customerId, pageNumber, pageSize), cancellationToken);
         return Ok(result);
-    }
-
-    private Guid GetCurrentUserId()
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
-        if (userId is null || !Guid.TryParse(userId, out var guid))
-        {
-            throw new UnauthorizedAccessException("User identifier not found.");
-        }
-
-        return guid;
     }
 }
 

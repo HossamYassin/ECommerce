@@ -1,3 +1,5 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using ECommerce.API.Middlewares;
 using ECommerce.Application;
@@ -13,6 +15,9 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Enable detailed JWT authentication logging for debugging
+Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
 builder.Host.UseSerilog((context, services, configuration) =>
     configuration
@@ -40,15 +45,26 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme."
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\""
     };
 
     options.AddSecurityDefinition("Bearer", securityScheme);
 
+    // Apply security requirement globally - this ensures Swagger UI sends the Authorization header
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
-            securityScheme,
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "bearer",
+                Name = "Authorization",
+                In = ParameterLocation.Header
+            },
             Array.Empty<string>()
         }
     });
@@ -76,7 +92,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtSettings.Issuer,
             ValidAudience = jwtSettings.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SigningKey))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SigningKey)),
+            RoleClaimType = ClaimTypes.Role,
+            NameClaimType = JwtRegisteredClaimNames.Sub
         };
     });
 
@@ -95,7 +113,13 @@ app.UseSerilogRequestLogging();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "E-Commerce API v1");
+        c.RoutePrefix = "swagger"; // Swagger UI at /swagger
+        c.DisplayRequestDuration();
+        c.EnablePersistAuthorization(); // Persist authorization across page refreshes
+    });
 }
 
 app.UseCors("CorsPolicy");

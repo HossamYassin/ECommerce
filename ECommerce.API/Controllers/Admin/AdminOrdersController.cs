@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using ECommerce.Application.Common.DTOs;
 using ECommerce.Application.Common.Models;
 using ECommerce.Application.Features.Orders.Commands.CancelOrder;
@@ -57,17 +56,6 @@ public class AdminOrdersController : ApiControllerBase
 
         var result = await Sender.Send(new UpdateOrderStatusCommand(id, status), cancellationToken);
         return Ok(result);
-    }
-
-    private Guid GetCurrentUserId()
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
-        if (userId is null || !Guid.TryParse(userId, out var guid))
-        {
-            throw new UnauthorizedAccessException("User identifier not found.");
-        }
-
-        return guid;
     }
 }
 

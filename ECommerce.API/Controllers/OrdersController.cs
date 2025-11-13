@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using ECommerce.Application.Common.DTOs;
 using ECommerce.Application.Features.Orders.Commands.CancelOrder;
 using ECommerce.Application.Features.Orders.Commands.PlaceOrder;
@@ -41,17 +40,6 @@ public class OrdersController : ApiControllerBase
         var isAdmin = User.IsInRole("Admin");
         var result = await Sender.Send(new GetOrderByIdQuery(id, userIdClaim, isAdmin), cancellationToken);
         return Ok(result);
-    }
-
-    private Guid GetCurrentUserId()
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
-        if (userId is null || !Guid.TryParse(userId, out var guid))
-        {
-            throw new UnauthorizedAccessException("User identifier not found.");
-        }
-
-        return guid;
     }
 }
 
