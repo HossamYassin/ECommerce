@@ -20,7 +20,7 @@ public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCo
             .MaximumLength(200);
 
         RuleFor(x => x.Description)
-            .MaximumLength(1000);
+            .MaximumLength(200);
     }
 }
 

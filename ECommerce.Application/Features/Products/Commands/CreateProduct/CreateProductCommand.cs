@@ -24,7 +24,7 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .MaximumLength(200);
 
         RuleFor(x => x.Description)
-            .MaximumLength(2000);
+            .MaximumLength(200);
 
         RuleFor(x => x.Price)
             .GreaterThan(0);
