@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/ECommerce.API/bin/Debug/net8.0
+/ECommerce.API/obj
+/ECommerce.Application/bin/Debug/net8.0
+/ECommerce.Application/obj
+/ECommerce.Domain/.vs
+/ECommerce.Domain/ECommerce.Domain/bin/Debug/net8.0
+/ECommerce.Domain/ECommerce.Domain/obj
+/ECommerce.Infrastructure/bin/Debug/net8.0
+/ECommerce.Infrastructure/obj
