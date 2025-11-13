@@ -1,6 +1,8 @@
 # E-Commerce Backend API (Clean Architecture)
 
-This solution delivers a layered .NET 8 Web API for managing e-commerce operations such as authentication, product and category administration, customer order workflows, and reporting. The architecture mirrors the `TestAndScore` structure and follows Clean Architecture principles.
+This solution delivers a layered .NET 8 Web API for managing e-commerce operations such as authentication, product and category administration, customer order workflows.
+
+The architecture follows Clean Architecture principles.
 
 ## Solution Layout
 
