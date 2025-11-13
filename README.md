@@ -141,17 +141,3 @@ Content-Type: application/json
 { "status": "Completed" }
 ```
 
-## Next Steps
-
-- Add full integration tests for critical flows (auth, ordering, admin management).
-- Implement background services (e.g., email notifications) using the existing architecture patterns.
-- Expand caching strategy (e.g., product search results) or introduce distributed caching for scaling scenarios.
-
-## Troubleshooting
-
-- **JWT invalid / unauthorized**: confirm that the same issuer/audience/signing key values are used for token generation (Infrastructure) and validation (API).
-- **EF Core migrations**: ensure the `--startup-project` is set to `ECommerce.API` so configuration is loaded correctly.
-- **Soft-deleted products not visible**: Admin endpoints can include inactive/soft-deleted records by passing `includeInactive=true`. Customer endpoints always filter them out.
-
-This project establishes the foundational backend for the machine test requirements. Extend the Application layer with additional commands/queries as domain behavior evolves while keeping the Clean Architecture boundaries intact.
-
